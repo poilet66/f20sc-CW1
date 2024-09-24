@@ -40,7 +40,7 @@ namespace CW1_Try2
                 response.EnsureSuccessStatusCode();
 
                 string responseBody = await response.Content.ReadAsStringAsync();
-                label1.Text = responseBody;
+                textBox2.Text = responseBody;
 
                 string url = box.Text;
                 string pattern = @"https?:\/\/(?:www\.)?([^\/]+)";
