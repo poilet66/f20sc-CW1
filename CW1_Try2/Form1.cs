@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace CW1_Try2
 {
@@ -41,7 +42,22 @@ namespace CW1_Try2
                 string responseBody = await response.Content.ReadAsStringAsync();
                 label1.Text = responseBody;
 
+                string url = box.Text;
+                string pattern = @"https?:\/\/(?:www\.)?([^\/]+)";
+                Match match = Regex.Match(url, pattern);
+                if (match.Success)
+                {
+                    // match.Groups[1] contains the domain (e.g., google.com)
+                    string domain = match.Groups[1].Value;
+                    listView1.Items.Add(new ListViewItem(domain));
+                }
+
             }
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
