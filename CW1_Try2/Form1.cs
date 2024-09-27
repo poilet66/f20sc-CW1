@@ -16,13 +16,25 @@ namespace CW1_Try2
     {
 
         HttpClient client;
+        FavouritesHandler handler;
 
         public Form1()
         {
             InitializeComponent();
             this.client = new HttpClient();
+            this.handler = new FavouritesHandler();
+            handler.addFavourite("test");
+            handler.addFavourite("test2");
+            handler.addFavourite("test3");
 
         }
+
+        private void Form1_FormClosing(object sender, FormClosedEventArgs e)
+        {
+            
+            this.handler.saveFavourites();
+        }
+
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -56,6 +68,16 @@ namespace CW1_Try2
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
