@@ -30,9 +30,15 @@ namespace CW1_Try2
             favourites.Remove(name);
         }
 
+        public List<string> getFavourites()
+        {
+            return this.favourites;
+        }
+
         // Overwrite save file with all new favourites (Can be optimised to only save new favourites)
         public void saveFavourites()
         {
+            File.Delete(SAVE_FILE_PATH);
             using (StreamWriter writer = new StreamWriter(SAVE_FILE_PATH))
             {
                 foreach (string fave in this.favourites)

@@ -23,10 +23,16 @@ namespace CW1_Try2
             InitializeComponent();
             this.client = new HttpClient();
             this.handler = new FavouritesHandler();
-            handler.addFavourite("test");
-            handler.addFavourite("test2");
-            handler.addFavourite("test3");
+            setFavouritesInCombobox();
 
+        }
+
+        private void setFavouritesInCombobox()
+        {
+            foreach(string favourite in handler.getFavourites())
+            {
+                this.comboBox1.Items.Add(favourite);
+            }
         }
 
         private void Form1_FormClosing(object sender, FormClosedEventArgs e)
@@ -41,7 +47,7 @@ namespace CW1_Try2
 
         }
 
-        private async void onTextboxEnter(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        private async void onTextboxEnter(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
 
@@ -67,6 +73,12 @@ namespace CW1_Try2
             }
         }
 
+        private void testFunc(object sender, KeyPressEventArgs e)
+        {
+            ComboBox box = (ComboBox)sender;
+            urlTextBox.Text = box.Text;
+        }
+
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -80,6 +92,22 @@ namespace CW1_Try2
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // If URL not empty
+            if(!string.Equals(urlTextBox.Text, ""))
+            {
+                //TODO: Add valid URL validation
+                handler.addFavourite(urlTextBox.Text);
+                comboBox1.Items.Add(urlTextBox.Text);
+            }
         }
     }
 }
