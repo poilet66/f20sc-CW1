@@ -44,7 +44,18 @@ namespace CW1_Try2
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            Console.WriteLine("testing");
+            TextBox textbox = (TextBox)sender;
 
+            foreach( string s in handler.getFavourites())
+            {
+                if(string.Equals(s, textbox.Text))
+                {
+                    button2.Text = "★";
+                    return;
+                }
+            }
+            button2.Text = "☆";
         }
 
         private async void onTextboxEnter(object sender, KeyPressEventArgs e)
@@ -96,18 +107,37 @@ namespace CW1_Try2
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            string newFave = urlTextBox.Text;
+
+            foreach (string s in handler.getFavourites())
+            {
+                if(string.Equals(newFave, s))
+                {
+                    handler.removeFavourite(s);
+                    comboBox1.Items.Remove(s);
+                    updateButtonImage();
+                    return;
+                }
+            }
             // If URL not empty
-            if(!string.Equals(urlTextBox.Text, ""))
+            if(!string.Equals(newFave, ""))
             {
                 //TODO: Add valid URL validation
                 handler.addFavourite(urlTextBox.Text);
                 comboBox1.Items.Add(urlTextBox.Text);
+                updateButtonImage();
             }
         }
+
+        private void updateButtonImage()
+        {
+            button2.Text = (string.Equals(button2.Text, "★") ? "☆" : "★");
+        }
+
     }
 }

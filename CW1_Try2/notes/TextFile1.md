@@ -11,12 +11,16 @@
 ## 27/09/2024
 - Finished favourites handler (still need to add denotation whether entered URL is favourited or not (to allow unfavouriting with same button))
 
+## 04/10/2024
+- Started work on history controller. Plan is to cache HTML so it can quickly be re-rendered without re-querying the website in question. Will use list view and map clean name -> full URL
+- Looked at using Anchor for resizability
+
 # TODO:
 - [x] Basic GUI
 - [x] HTTP Querying
 - [x] Status code indicator
 - [x] History view
-- [ ] Favourites system
+- [x] Favourites system
 - [ ] Bulk download
 - [ ] Initialise university homepage
 - [ ] History (back/forth arrows + stack impl)
