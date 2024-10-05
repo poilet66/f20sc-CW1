@@ -129,6 +129,7 @@ namespace CW1_Try2
             this.buttonBack.TabIndex = 7;
             this.buttonBack.Text = "<-";
             this.buttonBack.UseVisualStyleBackColor = true;
+            this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
             // button2
             // 
@@ -138,6 +139,7 @@ namespace CW1_Try2
             this.button2.TabIndex = 8;
             this.button2.Text = "☆";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
             // 
             // buttonForward
             // 

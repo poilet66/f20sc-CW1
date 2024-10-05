@@ -8,22 +8,41 @@ namespace CW1_Try2
 {
     class HistoryHandler
     {
-        Stack<HistoryItem> history;
+        Stack<HistoryItem> backStack, forwardStack;
 
         public HistoryHandler()
         {
-            this.history = new Stack<HistoryItem>();
+            this.backStack = new Stack<HistoryItem>();
+            this.forwardStack = new Stack<HistoryItem>();
         }
 
-        public void addToHistory(HistoryItem item)
+        public void addItem(HistoryItem item)
         {
-            history.Push(item);
+            backStack.Push(item);
         }
 
-        public HistoryItem? goBack()
+        public HistoryItem? goBack(HistoryItem? currentPage)
         {
-            if (history.Count == 0) return null;
-            return history.Pop();
+            //If nothing to go back to return null
+            if (backStack.Count == 0) return null;
+            // Otherwise, save current page and return topmost history
+            if (currentPage != null)
+            {
+                forwardStack.Push(currentPage.Value);
+            }
+            return backStack.Pop();
+        }
+
+        public HistoryItem? forward(HistoryItem? currentPage)
+        {
+            // If nothing to go forward to return null
+            if (forwardStack.Count == 0) return null;
+            // Otherwise, save current page to history and go forward
+            if (currentPage != null)
+            {
+                backStack.Push(currentPage.Value);
+            }
+            return forwardStack.Pop();
         }
         
     }

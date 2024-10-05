@@ -17,12 +17,14 @@ namespace CW1_Try2
 
         HttpClient client;
         FavouritesHandler handler;
+        HistoryHandler historyHandler;
 
         public Form1()
         {
             InitializeComponent();
             this.client = new HttpClient();
             this.handler = new FavouritesHandler();
+            this.historyHandler = new HistoryHandler();
             setFavouritesInCombobox();
 
         }
@@ -72,14 +74,18 @@ namespace CW1_Try2
                 textBox2.Text = responseBody;
 
                 string url = box.Text;
+                string domain = url;
                 string pattern = @"https?:\/\/(?:www\.)?([^\/]+)";
                 Match match = Regex.Match(url, pattern);
                 if (match.Success)
                 {
                     // match.Groups[1] contains the domain (e.g., google.com)
-                    string domain = match.Groups[1].Value;
+                    domain = match.Groups[1].Value;
                     listView1.Items.Add(new ListViewItem(domain));
                 }
+
+                // Add to history
+                historyHandler.addItem(new HistoryItem(url, domain, responseBody));
 
             }
         }
@@ -139,5 +145,37 @@ namespace CW1_Try2
             button2.Text = (string.Equals(button2.Text, "★") ? "☆" : "★");
         }
 
+        private void buttonBack_Click(object sender, EventArgs e)
+        {
+            // Try go back
+            HistoryItem? currentPage = null;
+            if(textBox2.Text != "")
+            {
+                currentPage = new HistoryItem(urlTextBox.Text, urlTextBox.Text, textBox2.Text);
+            }
+            // If valid history
+            HistoryItem? backPage = historyHandler.goBack(currentPage);
+            if(backPage != null)
+            {
+                urlTextBox.Text = backPage.Value.URL;
+                textBox2.Text = backPage.Value.HTMLBody;
+            }
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            if (handler.getFavourites().Contains(urlTextBox.Text))
+            {
+                handler.removeFavourite(urlTextBox.Text);
+                comboBox1.Items.Remove(urlTextBox.Text);
+                updateButtonImage();
+            } else
+            {
+                handler.addFavourite(urlTextBox.Text);
+                comboBox1.Items.Add(urlTextBox.Text);
+                updateButtonImage();
+            }
+            
+        }
     }
 }

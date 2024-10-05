@@ -15,6 +15,9 @@
 - Started work on history controller. Plan is to cache HTML so it can quickly be re-rendered without re-querying the website in question. Will use list view and map clean name -> full URL
 - Looked at using Anchor for resizability
 
+## 05/10/2024
+- Cleaned up favourites handler button usability etc. Favourites is completed now. Will begin work on finishing history system
+
 # TODO:
 - [x] Basic GUI
 - [x] HTTP Querying
@@ -25,3 +28,4 @@
 - [ ] Initialise university homepage
 - [ ] History (back/forth arrows + stack impl)
 - [ ] GUI Tidyup
+- [ ] Error Handling
