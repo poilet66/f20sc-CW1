@@ -26,6 +26,7 @@
 - [x] Favourites system
 - [ ] Bulk download
 - [ ] Initialise university homepage
-- [ ] History (back/forth arrows + stack impl)
+- [x] History (back/forth arrows + stack impl)
+  - [ ] Make history view highlight when page is navigated to (through arrows)
 - [ ] GUI Tidyup
 - [ ] Error Handling

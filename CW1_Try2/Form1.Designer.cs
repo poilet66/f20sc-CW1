@@ -149,6 +149,7 @@ namespace CW1_Try2
             this.buttonForward.TabIndex = 9;
             this.buttonForward.Text = "->";
             this.buttonForward.UseVisualStyleBackColor = true;
+            this.buttonForward.Click += new System.EventHandler(this.buttonForward_Click);
             // 
             // Form1
             // 

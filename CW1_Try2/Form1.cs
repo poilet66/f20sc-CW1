@@ -19,12 +19,15 @@ namespace CW1_Try2
         FavouritesHandler handler;
         HistoryHandler historyHandler;
 
+        HistoryHandlerNew historyHandler1;
+
         public Form1()
         {
             InitializeComponent();
             this.client = new HttpClient();
             this.handler = new FavouritesHandler();
             this.historyHandler = new HistoryHandler();
+            this.historyHandler1 = new HistoryHandlerNew();
             setFavouritesInCombobox();
 
         }
@@ -86,6 +89,7 @@ namespace CW1_Try2
 
                 // Add to history
                 historyHandler.addItem(new HistoryItem(url, domain, responseBody));
+                historyHandler1.addToHistory(new HistoryItem(url, domain, responseBody));
 
             }
         }
@@ -147,6 +151,7 @@ namespace CW1_Try2
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
+            /*
             // Try go back
             HistoryItem? currentPage = null;
             if(textBox2.Text != "")
@@ -160,6 +165,13 @@ namespace CW1_Try2
                 urlTextBox.Text = backPage.Value.URL;
                 textBox2.Text = backPage.Value.HTMLBody;
             }
+            */
+
+            if (!historyHandler1.backExists()) return;
+
+            HistoryItem item = historyHandler1.goBack().Value; // We can be sure its not null now
+            urlTextBox.Text = item.URL;
+            textBox2.Text = item.HTMLBody;
         }
 
         private void button2_Click_1(object sender, EventArgs e)
@@ -176,6 +188,15 @@ namespace CW1_Try2
                 updateButtonImage();
             }
             
+        }
+
+        private void buttonForward_Click(object sender, EventArgs e)
+        {
+            if (!historyHandler1.forwardExists()) return;
+
+            HistoryItem item = historyHandler1.goForward().Value;
+            urlTextBox.Text = item.URL;
+            textBox2.Text = item.HTMLBody;
         }
     }
 }
