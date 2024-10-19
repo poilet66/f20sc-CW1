@@ -40,6 +40,7 @@ namespace CW1_Try2
             this.buttonBack = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.buttonForward = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -151,11 +152,22 @@ namespace CW1_Try2
             this.buttonForward.UseVisualStyleBackColor = true;
             this.buttonForward.Click += new System.EventHandler(this.buttonForward_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(157, 415);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(56, 23);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "bulk";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonForward);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.buttonBack);
@@ -189,6 +201,7 @@ namespace CW1_Try2
         private System.Windows.Forms.Button buttonBack;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button buttonForward;
+        private System.Windows.Forms.Button button1;
     }
 }
 

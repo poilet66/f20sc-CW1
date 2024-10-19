@@ -15,19 +15,16 @@ namespace CW1_Try2
     public partial class Form1 : Form
     {
 
-        HttpClient client;
-        FavouritesHandler handler;
-        HistoryHandler historyHandler;
-
-        HistoryHandlerNew historyHandler1;
+        private HttpClient client;
+        private FavouritesHandler handler;
+        private HistoryHandler historyHandler;
 
         public Form1()
         {
             InitializeComponent();
             this.client = new HttpClient();
             this.handler = new FavouritesHandler();
-            this.historyHandler = new HistoryHandler();
-            this.historyHandler1 = new HistoryHandlerNew();
+            this.historyHandler = new HistoryHandler(this.listView1);
             setFavouritesInCombobox();
 
         }
@@ -88,8 +85,7 @@ namespace CW1_Try2
                 }
 
                 // Add to history
-                historyHandler.addItem(new HistoryItem(url, domain, responseBody));
-                historyHandler1.addToHistory(new HistoryItem(url, domain, responseBody));
+                historyHandler.addToHistory(new HistoryItem(url, domain, responseBody));
 
             }
         }
@@ -151,25 +147,9 @@ namespace CW1_Try2
 
         private void buttonBack_Click(object sender, EventArgs e)
         {
-            /*
-            // Try go back
-            HistoryItem? currentPage = null;
-            if(textBox2.Text != "")
-            {
-                currentPage = new HistoryItem(urlTextBox.Text, urlTextBox.Text, textBox2.Text);
-            }
-            // If valid history
-            HistoryItem? backPage = historyHandler.goBack(currentPage);
-            if(backPage != null)
-            {
-                urlTextBox.Text = backPage.Value.URL;
-                textBox2.Text = backPage.Value.HTMLBody;
-            }
-            */
+            if (!historyHandler.backExists()) return;
 
-            if (!historyHandler1.backExists()) return;
-
-            HistoryItem item = historyHandler1.goBack().Value; // We can be sure its not null now
+            HistoryItem item = historyHandler.goBack().Value; // We can be sure its not null now
             urlTextBox.Text = item.URL;
             textBox2.Text = item.HTMLBody;
         }
@@ -192,11 +172,21 @@ namespace CW1_Try2
 
         private void buttonForward_Click(object sender, EventArgs e)
         {
-            if (!historyHandler1.forwardExists()) return;
+            if (!historyHandler.forwardExists()) return;
 
-            HistoryItem item = historyHandler1.goForward().Value;
+            HistoryItem item = historyHandler.goForward().Value;
             urlTextBox.Text = item.URL;
             textBox2.Text = item.HTMLBody;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            String output = "";
+            foreach (ListViewItem item in listView1.SelectedItems)
+            {
+                output += item.Text + "\r\n";
+            }
+            textBox2.Text = output;
         }
     }
 }

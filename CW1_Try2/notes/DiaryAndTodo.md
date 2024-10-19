@@ -18,6 +18,9 @@
 ## 05/10/2024
 - Cleaned up favourites handler button usability etc. Favourites is completed now. Will begin work on finishing history system
 
+## 19/10/2024
+- I think I forgot add a few days worth of entries but its chiiiiill, I've basically finished GUI for history and bulk interaction with history (I should add 'protocol' for bulk too)
+
 # TODO:
 - [x] Basic GUI
 - [x] HTTP Querying
@@ -25,8 +28,12 @@
 - [x] History view
 - [x] Favourites system
 - [ ] Bulk download
+  - [x] Put history list view in HistoryHandler? 
+  - [ ] Button bulk download
+  - [ ] Protocol bulk download
 - [ ] Initialise university homepage
 - [x] History (back/forth arrows + stack impl)
-  - [ ] Make history view highlight when page is navigated to (through arrows)
+  - [x] Make history view highlight when page is navigated to (through arrows)
+  - [x] Fix bug where listview does update when search
 - [ ] GUI Tidyup
 - [ ] Error Handling

@@ -8,43 +8,58 @@ namespace CW1_Try2
 {
     class HistoryHandler
     {
-        Stack<HistoryItem> backStack, forwardStack;
+        System.Windows.Forms.ListView listView;
+        List<HistoryItem> history;
+        int currentPointer;
 
-        public HistoryHandler()
+        public HistoryHandler(System.Windows.Forms.ListView listView)
         {
-            this.backStack = new Stack<HistoryItem>();
-            this.forwardStack = new Stack<HistoryItem>();
+            this.history = new List<HistoryItem>();
+            this.listView = listView;
+            currentPointer = -1;
         }
 
-        public void addItem(HistoryItem item)
+        public void addToHistory(HistoryItem item)
         {
-            backStack.Push(item);
+            history.Add(item);
+            currentPointer = history.Count - 1;
+            updateListView();
+
         }
 
-        public HistoryItem? goBack(HistoryItem? currentPage)
+        public HistoryItem? goBack()
         {
-            //If nothing to go back to return null
-            if (backStack.Count == 0) return null;
-            // Otherwise, save current page and return topmost history
-            if (currentPage != null)
-            {
-                forwardStack.Push(currentPage.Value);
-            }
-            return backStack.Pop();
+            if (!backExists()) return null;
+
+            currentPointer--;
+            updateListView();
+            return history[currentPointer];
         }
 
-        public HistoryItem? forward(HistoryItem? currentPage)
+        public HistoryItem? goForward()
         {
-            // If nothing to go forward to return null
-            if (forwardStack.Count == 0) return null;
-            // Otherwise, save current page to history and go forward
-            if (currentPage != null)
-            {
-                backStack.Push(currentPage.Value);
-            }
-            return forwardStack.Pop();
+            if (!forwardExists()) return null; //TODO: Check this is correct
+
+            currentPointer++;
+            updateListView();
+            return history[currentPointer];
         }
-        
+
+        public Boolean backExists()
+        {
+            return currentPointer > 0;
+        }
+
+        public Boolean forwardExists()
+        {
+            return currentPointer < history.Count - 1;
+        }
+
+        private void updateListView()
+        {
+            this.listView.SelectedItems.Clear();
+            this.listView.Items[currentPointer].Selected = true;
+        }
     }
 
     public struct HistoryItem
