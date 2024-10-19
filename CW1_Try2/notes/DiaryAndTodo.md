@@ -37,3 +37,4 @@
   - [x] Fix bug where listview does update when search
 - [ ] GUI Tidyup
 - [ ] Error Handling
+- [ ] Rename elements for more clarity
