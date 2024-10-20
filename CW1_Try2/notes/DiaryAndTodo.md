@@ -35,6 +35,10 @@
 - [x] History (back/forth arrows + stack impl)
   - [x] Make history view highlight when page is navigated to (through arrows)
   - [x] Fix bug where listview does update when search
+  - [ ] History saving (only names, dont cache)
+- [ ] Add page title rendering
+- [ ] Homepage URL definition
+- [ ] Name association for favourites
 - [ ] GUI Tidyup
 - [ ] Error Handling
 - [ ] Rename elements for more clarity

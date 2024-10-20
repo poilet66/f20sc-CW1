@@ -31,7 +31,7 @@ namespace CW1_Try2
 
         private void setFavouritesInCombobox()
         {
-            foreach(string favourite in handler.getFavourites())
+            foreach (string favourite in handler.getFavourites())
             {
                 this.comboBox1.Items.Add(favourite);
             }
@@ -39,7 +39,7 @@ namespace CW1_Try2
 
         private void Form1_FormClosing(object sender, FormClosedEventArgs e)
         {
-            
+
             this.handler.saveFavourites();
         }
 
@@ -49,9 +49,9 @@ namespace CW1_Try2
             Console.WriteLine("testing");
             TextBox textbox = (TextBox)sender;
 
-            foreach( string s in handler.getFavourites())
+            foreach (string s in handler.getFavourites())
             {
-                if(string.Equals(s, textbox.Text))
+                if (string.Equals(s, textbox.Text))
                 {
                     button2.Text = "★";
                     return;
@@ -66,27 +66,7 @@ namespace CW1_Try2
 
             {
                 TextBox box = (TextBox)sender;
-                using HttpResponseMessage response = await client.GetAsync(box.Text);
-                label2.Text = "" + ((int) response.StatusCode) + " - " + response.StatusCode.ToString(); //TODO: Use string formatting to make this nicer
-                response.EnsureSuccessStatusCode();
-
-                string responseBody = await response.Content.ReadAsStringAsync();
-                textBox2.Text = responseBody;
-
-                string url = box.Text;
-                string domain = url;
-                string pattern = @"https?:\/\/(?:www\.)?([^\/]+)";
-                Match match = Regex.Match(url, pattern);
-                if (match.Success)
-                {
-                    // match.Groups[1] contains the domain (e.g., google.com)
-                    domain = match.Groups[1].Value;
-                    listView1.Items.Add(new ListViewItem(domain));
-                }
-
-                // Add to history
-                historyHandler.addToHistory(new HistoryItem(url, domain, responseBody));
-
+                queryURL(box.Text, null);
             }
         }
 
@@ -113,7 +93,7 @@ namespace CW1_Try2
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -122,7 +102,7 @@ namespace CW1_Try2
 
             foreach (string s in handler.getFavourites())
             {
-                if(string.Equals(newFave, s))
+                if (string.Equals(newFave, s))
                 {
                     handler.removeFavourite(s);
                     comboBox1.Items.Remove(s);
@@ -131,7 +111,7 @@ namespace CW1_Try2
                 }
             }
             // If URL not empty
-            if(!string.Equals(newFave, ""))
+            if (!string.Equals(newFave, ""))
             {
                 //TODO: Add valid URL validation
                 handler.addFavourite(urlTextBox.Text);
@@ -149,9 +129,18 @@ namespace CW1_Try2
         {
             if (!historyHandler.backExists()) return;
 
-            HistoryItem item = historyHandler.goBack().Value; // We can be sure its not null now
-            urlTextBox.Text = item.URL;
-            textBox2.Text = item.HTMLBody;
+            HistoryItem item = historyHandler.goBack(); // We can be sure its not null now
+
+            // If history item has cache, use it
+            if(item.isCached())
+            {
+                urlTextBox.Text = item.URL;
+                textBox2.Text = item.HTMLBody;
+                return;
+            }
+
+            //Otherwise, re-query to render
+            queryURL(item.URL, item);
         }
 
         private void button2_Click_1(object sender, EventArgs e)
@@ -161,20 +150,21 @@ namespace CW1_Try2
                 handler.removeFavourite(urlTextBox.Text);
                 comboBox1.Items.Remove(urlTextBox.Text);
                 updateButtonImage();
-            } else
+            }
+            else
             {
                 handler.addFavourite(urlTextBox.Text);
                 comboBox1.Items.Add(urlTextBox.Text);
                 updateButtonImage();
             }
-            
+
         }
 
         private void buttonForward_Click(object sender, EventArgs e)
         {
             if (!historyHandler.forwardExists()) return;
 
-            HistoryItem item = historyHandler.goForward().Value;
+            HistoryItem item = historyHandler.goForward();
             urlTextBox.Text = item.URL;
             textBox2.Text = item.HTMLBody;
         }
@@ -188,5 +178,63 @@ namespace CW1_Try2
             }
             textBox2.Text = output;
         }
+
+        private static String GetTitle(string htmlBody)
+        {
+            string ret = "";
+
+            string pattern = @"<title>(.*?)<\/title>";
+            Match match = Regex.Match(htmlBody, pattern);
+            if (match.Success)
+            {
+                ret = match.Value;
+                ret = ret.Replace("<title>", "").Replace("</title>", "");
+            }
+            return ret;
+        }
+
+        private async Task<string> GetHtmlBody(string url)
+        {
+            using HttpResponseMessage response = await client.GetAsync(url);
+
+            response.EnsureSuccessStatusCode();
+
+            // Await and get the response content as a string
+            string content = await response.Content.ReadAsStringAsync();
+
+            // Return the string content
+            return content;
+        }
+
+        private async void queryURL(string url, HistoryItem? cacheToUpdate)
+        {
+
+            using HttpResponseMessage response = await client.GetAsync(url);
+            label2.Text = "" + ((int)response.StatusCode) + " - " + response.StatusCode.ToString(); //TODO: Use string formatting to make this nicer
+            response.EnsureSuccessStatusCode();
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+            textBox2.Text = GetTitle(responseBody) + "\r\n" + responseBody; // TODO: Fix this
+
+            if(cacheToUpdate != null)
+            {
+                cacheToUpdate.cacheHTML(responseBody);
+                return;
+            }
+
+            string domain = url;
+            string pattern = @"https?:\/\/(?:www\.)?([^\/]+)";
+            Match match = Regex.Match(url, pattern);
+            if (match.Success)
+            {
+                // match.Groups[1] contains the domain (e.g., google.com)
+                domain = match.Groups[1].Value;
+                listView1.Items.Add(new ListViewItem(domain));
+            }
+
+            // Add to history
+            historyHandler.addToHistory(new HistoryItem(url, domain));
+        }
+
     }
 }

@@ -27,7 +27,7 @@ namespace CW1_Try2
 
         }
 
-        public HistoryItem? goBack()
+        public HistoryItem goBack()
         {
             if (!backExists()) return null;
 
@@ -60,20 +60,6 @@ namespace CW1_Try2
             this.listView.SelectedItems.Clear();
             this.listView.Items[currentPointer].Selected = true;
         }
-    }
-
-    public struct HistoryItem
-    {
-        public HistoryItem(string url, string name, string htmlBody)
-        {
-            this.URL = url;
-            this.guiName = name;
-            this.HTMLBody = htmlBody;
-        }
-
-        public string URL;
-        public string guiName;
-        public string HTMLBody;
 
     }
 }
