@@ -21,6 +21,9 @@
 ## 19/10/2024
 - I think I forgot add a few days worth of entries but its chiiiiill, I've basically finished GUI for history and bulk interaction with history (I should add 'protocol' for bulk too)
 
+## 20/10/2024
+- Added toggleable history caching, the plan here is only save history to file and then if user goes back they can reload history (and cache it) then
+
 # TODO:
 - [x] Basic GUI
 - [x] HTTP Querying
