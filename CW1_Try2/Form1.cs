@@ -41,6 +41,7 @@ namespace CW1_Try2
         {
 
             this.handler.saveFavourites();
+            this.historyHandler.saveHistory();
         }
 
 
@@ -60,7 +61,7 @@ namespace CW1_Try2
             button2.Text = "☆";
         }
 
-        private async void onTextboxEnter(object sender, KeyPressEventArgs e)
+        private void onTextboxEnter(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
 
@@ -164,9 +165,18 @@ namespace CW1_Try2
         {
             if (!historyHandler.forwardExists()) return;
 
-            HistoryItem item = historyHandler.goForward();
-            urlTextBox.Text = item.URL;
-            htmlTextbox.Text = item.HTMLBody;
+            HistoryItem item = historyHandler.goForward(); // We can be sure its not null now
+
+            // If history item has cache, use it
+            if (item.isCached())
+            {
+                urlTextBox.Text = item.URL;
+                htmlTextbox.Text = item.HTMLBody;
+                return;
+            }
+
+            //Otherwise, re-query to render
+            queryURL(item.URL, item);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -179,7 +189,7 @@ namespace CW1_Try2
             htmlTextbox.Text = output;
         }
 
-        private static String GetTitle(string htmlBody)
+        public static String GetTitle(string htmlBody)
         {
             string ret = "";
 
@@ -207,21 +217,57 @@ namespace CW1_Try2
 
         private async void queryURL(string url, HistoryItem? cacheToUpdate)
         {
-
-            using HttpResponseMessage response = await client.GetAsync(url);
-            label2.Text = "" + ((int)response.StatusCode) + " - " + response.StatusCode.ToString(); //TODO: Use string formatting to make this nicer
-            response.EnsureSuccessStatusCode();
-
-            string responseBody = await response.Content.ReadAsStringAsync();
-            htmlTextbox.Text = responseBody.Trim();
-            titleTextbox.Text = GetTitle(responseBody);
-
-            if(cacheToUpdate != null)
+            try
             {
-                cacheToUpdate.cacheHTML(responseBody);
+                using HttpResponseMessage response = await client.GetAsync(url);
+
+                codeTextbox.Text = "" + ((int)response.StatusCode) + " - " + response.StatusCode.ToString(); //TODO: Use string formatting to make this nicer
+                response.EnsureSuccessStatusCode();
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+                htmlTextbox.Text = responseBody.Trim();
+                titleTextbox.Text = GetTitle(responseBody);
+
+                if (cacheToUpdate != null)
+                {
+                    cacheToUpdate.cacheHTML(responseBody);
+                    return;
+                }
+
+                string domain = url;
+                string pattern = @"https?:\/\/(?:www\.)?([^\/]+)";
+                Match match = Regex.Match(url, pattern);
+                if (match.Success)
+                {
+                    // match.Groups[1] contains the domain (e.g., google.com)
+                    domain = match.Groups[1].Value;
+                    listView1.Items.Add(new ListViewItem(domain));
+                }
+
+                // Add to history
+                historyHandler.addToHistory(new HistoryItem(url, domain));
+            } 
+            catch (InvalidOperationException e)
+            {
+                titleTextbox.Text = "<ERROR> Not a valid HTTP Request <ERROR>";
+            }
+            catch (HttpRequestException e)
+            {
+                titleTextbox.Text = "<ERROR> HTTPException <ERROR>";
                 return;
             }
 
+
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            queryURL(urlTextBox.Text, null);
+        }
+
+        public static string? getTitle(string url)
+        {
             string domain = url;
             string pattern = @"https?:\/\/(?:www\.)?([^\/]+)";
             Match match = Regex.Match(url, pattern);
@@ -229,16 +275,9 @@ namespace CW1_Try2
             {
                 // match.Groups[1] contains the domain (e.g., google.com)
                 domain = match.Groups[1].Value;
-                listView1.Items.Add(new ListViewItem(domain));
+                return domain;
             }
-
-            // Add to history
-            historyHandler.addToHistory(new HistoryItem(url, domain));
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {;
-            queryURL(urlTextBox.Text, null);
+            return null;
         }
     }
 }

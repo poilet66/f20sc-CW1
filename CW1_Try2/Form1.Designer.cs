@@ -31,8 +31,6 @@ namespace CW1_Try2
         {
             this.label1 = new System.Windows.Forms.Label();
             this.urlTextBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.listView1 = new System.Windows.Forms.ListView();
             this.History = new System.Windows.Forms.ColumnHeader();
             this.htmlTextbox = new System.Windows.Forms.TextBox();
@@ -65,22 +63,6 @@ namespace CW1_Try2
             this.urlTextBox.TabIndex = 1;
             this.urlTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             this.urlTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.onTextboxEnter);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(466, 106);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(0, 15);
-            this.label2.TabIndex = 2;
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
-            this.menuStrip1.TabIndex = 3;
-            this.menuStrip1.Text = "menuStrip1";
             // 
             // listView1
             // 
@@ -118,9 +100,9 @@ namespace CW1_Try2
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(667, 51);
+            this.comboBox1.Location = new System.Drawing.Point(606, 51);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 23);
+            this.comboBox1.Size = new System.Drawing.Size(182, 23);
             this.comboBox1.TabIndex = 6;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.comboBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.testFunc);
@@ -137,7 +119,7 @@ namespace CW1_Try2
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(635, 50);
+            this.button2.Location = new System.Drawing.Point(574, 21);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(26, 24);
             this.button2.TabIndex = 8;
@@ -169,14 +151,16 @@ namespace CW1_Try2
             // 
             this.titleTextbox.Location = new System.Drawing.Point(231, 22);
             this.titleTextbox.Name = "titleTextbox";
-            this.titleTextbox.Size = new System.Drawing.Size(249, 23);
+            this.titleTextbox.ReadOnly = true;
+            this.titleTextbox.Size = new System.Drawing.Size(220, 23);
             this.titleTextbox.TabIndex = 11;
             // 
             // codeTextbox
             // 
-            this.codeTextbox.Location = new System.Drawing.Point(486, 22);
+            this.codeTextbox.Location = new System.Drawing.Point(457, 22);
             this.codeTextbox.Name = "codeTextbox";
-            this.codeTextbox.Size = new System.Drawing.Size(82, 23);
+            this.codeTextbox.ReadOnly = true;
+            this.codeTextbox.Size = new System.Drawing.Size(111, 23);
             this.codeTextbox.TabIndex = 12;
             // 
             // button3
@@ -204,11 +188,8 @@ namespace CW1_Try2
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.htmlTextbox);
             this.Controls.Add(this.listView1);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.urlTextBox);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosing);
@@ -223,7 +204,6 @@ namespace CW1_Try2
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox urlTextBox;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader History;
         private System.Windows.Forms.TextBox htmlTextbox;
