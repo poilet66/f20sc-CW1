@@ -135,7 +135,7 @@ namespace CW1_Try2
             if(item.isCached())
             {
                 urlTextBox.Text = item.URL;
-                textBox2.Text = item.HTMLBody;
+                htmlTextbox.Text = item.HTMLBody;
                 return;
             }
 
@@ -166,7 +166,7 @@ namespace CW1_Try2
 
             HistoryItem item = historyHandler.goForward();
             urlTextBox.Text = item.URL;
-            textBox2.Text = item.HTMLBody;
+            htmlTextbox.Text = item.HTMLBody;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -176,19 +176,18 @@ namespace CW1_Try2
             {
                 output += item.Text + "\r\n";
             }
-            textBox2.Text = output;
+            htmlTextbox.Text = output;
         }
 
         private static String GetTitle(string htmlBody)
         {
             string ret = "";
 
-            string pattern = @"<title>(.*?)<\/title>";
-            Match match = Regex.Match(htmlBody, pattern);
+            string pattern = @"<title[^>]*>([\s\S]*?)<\/title>";
+            Match match = Regex.Match(htmlBody, pattern, RegexOptions.IgnoreCase);
             if (match.Success)
             {
-                ret = match.Value;
-                ret = ret.Replace("<title>", "").Replace("</title>", "");
+                ret = match.Groups[1].Value;
             }
             return ret;
         }
@@ -214,7 +213,8 @@ namespace CW1_Try2
             response.EnsureSuccessStatusCode();
 
             string responseBody = await response.Content.ReadAsStringAsync();
-            textBox2.Text = GetTitle(responseBody) + "\r\n" + responseBody; // TODO: Fix this
+            htmlTextbox.Text = responseBody.Trim();
+            titleTextbox.Text = GetTitle(responseBody);
 
             if(cacheToUpdate != null)
             {
@@ -236,5 +236,9 @@ namespace CW1_Try2
             historyHandler.addToHistory(new HistoryItem(url, domain));
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {;
+            queryURL(urlTextBox.Text, null);
+        }
     }
 }
