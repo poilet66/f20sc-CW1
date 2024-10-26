@@ -1,2 +1,1 @@
-https://www.google.com
-https://www.dish.com
+[{"URL":"https://www.google.com","guiName":"google.com","HTMLBody":"","cached":false},{"URL":"https://www.google.com","guiName":"google.com","HTMLBody":"","cached":false},{"URL":"https://www.google.com","guiName":"google.com","HTMLBody":"","cached":false},{"URL":"https://www.google.com/","guiName":"google.com","HTMLBody":"","cached":false}]

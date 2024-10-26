@@ -41,6 +41,8 @@
   - [x] History saving (only names, dont cache)
 - [x] Add page title rendering
 - [ ] Homepage URL definition
+- [x] Refresh button
+- [ ] Stop refresh working when no page has been visited
 - [x] Name association for favourites
 - [x] Implement favourites saving
 - [x] Make 'currentWebsite' field and use that for favourites saving (make updating this also update urlTextbox)

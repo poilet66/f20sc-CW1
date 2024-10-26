@@ -49,6 +49,13 @@ namespace CW1_Try2
             return history[currentPointer];
         }
 
+        public HistoryItem? mostRecent()
+        {
+            if (history.Count <= 0) return null;
+
+            return history[history.Count - 1];
+        }
+
         public Boolean backExists()
         {
             return currentPointer > 0;
@@ -87,7 +94,7 @@ namespace CW1_Try2
                 // Read file line by line, adding lines (favourites) to favourite list
                 while ((line = reader.ReadLine()) != null)
                 {
-                    string title = Form1.getTitle(line);
+                    string title = Form1.getDomain(line);
                     savedHistory.Add(new HistoryItem(line, title));
                     listView.Items.Add(title);
                     

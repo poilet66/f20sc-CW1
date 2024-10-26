@@ -17,7 +17,7 @@ namespace CW1_Try2
 
         private HttpClient client;
         private FavouritesHandler handler;
-        private HistoryHandler historyHandler;
+        private NewHistoryHandler historyHandler;
         private FavouriteItem currentPage;
 
         public Form1()
@@ -25,7 +25,7 @@ namespace CW1_Try2
             InitializeComponent();
             this.client = new HttpClient();
             this.handler = new FavouritesHandler();
-            this.historyHandler = new HistoryHandler(this.historyView);
+            this.historyHandler = new NewHistoryHandler(this.historyView);
             setFavouritesInCombobox();
 
         }
@@ -147,7 +147,7 @@ namespace CW1_Try2
                     return;
                 }
             }
-            FavouriteItem newItem = new FavouriteItem(urlTextBox.Text, titleTextbox.Text);
+            FavouriteItem newItem = new FavouriteItem(currentPage.Url, titleTextbox.Text);
             handler.addFavourite(newItem);
             favouritesBox.Items.Add(newItem);
             updateButtonImage();
@@ -176,9 +176,15 @@ namespace CW1_Try2
         private void bulkButton_Click(object sender, EventArgs e)
         {
             String output = "";
+            if(String.Equals(urlTextBox.Text, ""))
+            {
+                titleTextbox.Text = "<ERROR> Enter a valid bulk file name <ERROR>";
+                return;
+            }
             foreach (ListViewItem item in historyView.SelectedItems)
             {
-                output += item.Text + "\r\n";
+                output += ((HistoryItem)item.Tag).URL + "\r\n";
+
             }
             htmlTextbox.Text = output;
         }
@@ -194,19 +200,6 @@ namespace CW1_Try2
                 ret = match.Groups[1].Value;
             }
             return ret;
-        }
-
-        private async Task<string> GetHtmlBody(string url)
-        {
-            using HttpResponseMessage response = await client.GetAsync(url);
-
-            response.EnsureSuccessStatusCode();
-
-            // Await and get the response content as a string
-            string content = await response.Content.ReadAsStringAsync();
-
-            // Return the string content
-            return content;
         }
 
         private async void queryURL(string url, HistoryItem? cacheToUpdate)
@@ -238,11 +231,14 @@ namespace CW1_Try2
                 {
                     // match.Groups[1] contains the domain (e.g., google.com)
                     domain = match.Groups[1].Value;
-                    historyView.Items.Add(new ListViewItem(domain));
+                    
                 }
+                HistoryItem newItem = new HistoryItem(url, domain);
 
-                // Add to history
-                historyHandler.addToHistory(new HistoryItem(url, domain));
+                // add to listview
+                historyView.Items.Add(new ListViewItem(newItem.guiName) { Tag = newItem });
+                // Add to logical history
+                historyHandler.addToHistory(newItem);
             } 
             catch (InvalidOperationException e)
             {
@@ -263,7 +259,7 @@ namespace CW1_Try2
             queryURL(urlTextBox.Text, null);
         }
 
-        public static string? getTitle(string url)
+        public static string? getDomain(string url)
         {
             string domain = url;
             string pattern = @"https?:\/\/(?:www\.)?([^\/]+)";
@@ -275,6 +271,16 @@ namespace CW1_Try2
                 return domain;
             }
             return null;
+        }
+
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            if (historyHandler.mostRecent() == null) return;
+            HistoryItem item = historyHandler.mostRecent();
+            titleTextbox.Text = "";
+            htmlTextbox.Text = "";
+            queryURL(item.URL, item);
+           
         }
     }
 }
