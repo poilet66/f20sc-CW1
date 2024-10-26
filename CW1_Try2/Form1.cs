@@ -147,6 +147,7 @@ namespace CW1_Try2
                     return;
                 }
             }
+            if (currentPage == null) return;
             FavouriteItem newItem = new FavouriteItem(currentPage.Url, titleTextbox.Text);
             handler.addFavourite(newItem);
             favouritesBox.Items.Add(newItem);
@@ -173,7 +174,7 @@ namespace CW1_Try2
             queryURL(item.URL, item);
         }
 
-        private void bulkButton_Click(object sender, EventArgs e)
+        private async void bulkButton_Click(object sender, EventArgs e)
         {
             String output = "";
             if(String.Equals(urlTextBox.Text, ""))
@@ -183,7 +184,8 @@ namespace CW1_Try2
             }
             foreach (ListViewItem item in historyView.SelectedItems)
             {
-                output += ((HistoryItem)item.Tag).URL + "\r\n";
+                WebsiteResponse response = await fetchWebsite(((HistoryItem)item.Tag).URL);
+                output += $"{response.responseCode} {response.bytes} {response.url}\r\n"; ;
 
             }
             htmlTextbox.Text = output;
@@ -250,8 +252,6 @@ namespace CW1_Try2
                 return;
             }
 
-
-
         }
 
         private void searchButton_Click(object sender, EventArgs e)
@@ -282,5 +282,26 @@ namespace CW1_Try2
             queryURL(item.URL, item);
            
         }
+
+        private async Task<WebsiteResponse> fetchWebsite(string url)
+        {
+            try
+            {
+                using HttpResponseMessage response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode(); // Throws if the status code is not 2xx
+
+                // Get the response body as a string
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                // Populate and return the WebsiteResponse struct
+                return new WebsiteResponse((int)response.StatusCode, response.Content.Headers.ContentLength ?? 0, url, responseBody);
+            }
+            catch (Exception ex) when (ex is InvalidOperationException || ex is HttpRequestException)
+            {
+                // Return a default WebsiteResponse with an error code or message
+                return new WebsiteResponse(0, 0, url, "");
+            }
+        }
     }
+
 }

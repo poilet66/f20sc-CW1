@@ -1,1 +1,1 @@
-[{"Url":"https://www.dish.com","Name":"DISH"},{"Url":"https://www.google.com","Name":"Google YAY!"},{"Url":"https://www.coolmathgames.com","Name":"fun bum time YAY"}]
+[{"Url":"https://www.dish.com","Name":"DISH"},{"Url":"https://www.google.com","Name":"Google YAY!"},{"Url":"https://www.coolmathgames.com","Name":"fun bum time YAY"},{"Url":"https://www.snapchat.com","Name":"Less social media. More Snapchat."}]
