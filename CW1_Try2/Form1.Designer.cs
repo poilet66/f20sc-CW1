@@ -61,7 +61,7 @@ namespace CW1_Try2
             this.urlTextBox.Name = "urlTextBox";
             this.urlTextBox.Size = new System.Drawing.Size(337, 23);
             this.urlTextBox.TabIndex = 1;
-            this.urlTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.urlTextBox.TextChanged += new System.EventHandler(this.urlTextBox_TextChanged);
             this.urlTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.onTextboxEnter);
             // 
             // historyView
@@ -77,7 +77,6 @@ namespace CW1_Try2
             this.historyView.TabIndex = 4;
             this.historyView.UseCompatibleStateImageBehavior = false;
             this.historyView.View = System.Windows.Forms.View.Details;
-            this.historyView.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
             // History
             // 
@@ -95,7 +94,6 @@ namespace CW1_Try2
             this.htmlTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.htmlTextbox.Size = new System.Drawing.Size(312, 317);
             this.htmlTextbox.TabIndex = 5;
-            this.htmlTextbox.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // favouritesBox
             // 
@@ -105,7 +103,6 @@ namespace CW1_Try2
             this.favouritesBox.Name = "favouritesBox";
             this.favouritesBox.Size = new System.Drawing.Size(182, 23);
             this.favouritesBox.TabIndex = 6;
-            this.favouritesBox.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.favouritesBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.testFunc);
             // 
             // buttonBack
@@ -126,7 +123,7 @@ namespace CW1_Try2
             this.favouriteButton.TabIndex = 8;
             this.favouriteButton.Text = "☆";
             this.favouriteButton.UseVisualStyleBackColor = true;
-            this.favouriteButton.Click += new System.EventHandler(this.button2_Click_1);
+            this.favouriteButton.Click += new System.EventHandler(this.favouriteButton_Click);
             // 
             // buttonForward
             // 
@@ -146,13 +143,12 @@ namespace CW1_Try2
             this.bulkButton.TabIndex = 10;
             this.bulkButton.Text = "bulk";
             this.bulkButton.UseVisualStyleBackColor = true;
-            this.bulkButton.Click += new System.EventHandler(this.button1_Click);
+            this.bulkButton.Click += new System.EventHandler(this.bulkButton_Click);
             // 
             // titleTextbox
             // 
             this.titleTextbox.Location = new System.Drawing.Point(231, 22);
             this.titleTextbox.Name = "titleTextbox";
-            this.titleTextbox.ReadOnly = true;
             this.titleTextbox.Size = new System.Drawing.Size(220, 23);
             this.titleTextbox.TabIndex = 11;
             // 
@@ -172,7 +168,7 @@ namespace CW1_Try2
             this.searchButton.TabIndex = 13;
             this.searchButton.Text = "🔍";
             this.searchButton.UseVisualStyleBackColor = true;
-            this.searchButton.Click += new System.EventHandler(this.button3_Click);
+            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
             // 
             // Form1
             // 
@@ -205,7 +201,6 @@ namespace CW1_Try2
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox urlTextBox;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListView historyView;
         private System.Windows.Forms.ColumnHeader History;
         private System.Windows.Forms.TextBox htmlTextbox;

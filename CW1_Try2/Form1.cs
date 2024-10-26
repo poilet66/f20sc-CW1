@@ -18,6 +18,7 @@ namespace CW1_Try2
         private HttpClient client;
         private FavouritesHandler handler;
         private HistoryHandler historyHandler;
+        private FavouriteItem currentPage;
 
         public Form1()
         {
@@ -45,9 +46,8 @@ namespace CW1_Try2
         }
 
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void urlTextBox_TextChanged(object sender, EventArgs e)
         {
-            Console.WriteLine("testing");
             TextBox textbox = (TextBox)sender;
 
             foreach (FavouriteItem favourite in handler.getFavourites())
@@ -78,26 +78,11 @@ namespace CW1_Try2
                 ComboBox box = (ComboBox)sender;
                 FavouriteItem item = (FavouriteItem)box.SelectedItem;
                 urlTextBox.Text = item.Url;
+                titleTextbox.Text = item.Name;
 
             }
         }
-
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
@@ -120,7 +105,7 @@ namespace CW1_Try2
             if (!string.Equals(newFave, ""))
             {
                 //TODO: Add valid URL validation
-                handler.addFavourite(new FavouriteItem(urlTextBox.Text, titleTextbox.Text));
+                handler.addFavourite(new FavouriteItem(currentPage.Url, titleTextbox.Text));
                 favouritesBox.Items.Add(urlTextBox.Text);
                 updateButtonImage();
             }
@@ -138,10 +123,11 @@ namespace CW1_Try2
             HistoryItem item = historyHandler.goBack(); // We can be sure its not null now
 
             // If history item has cache, use it
-            if(item.isCached())
+            if (item.isCached())
             {
                 urlTextBox.Text = item.URL;
                 htmlTextbox.Text = item.HTMLBody;
+                titleTextbox.Text = GetTitle(item.HTMLBody).Trim();
                 return;
             }
 
@@ -149,7 +135,7 @@ namespace CW1_Try2
             queryURL(item.URL, item);
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
+        private void favouriteButton_Click(object sender, EventArgs e)
         {
             foreach (FavouriteItem item in handler.getFavourites())
             {
@@ -179,6 +165,7 @@ namespace CW1_Try2
             {
                 urlTextBox.Text = item.URL;
                 htmlTextbox.Text = item.HTMLBody;
+                titleTextbox.Text = GetTitle(item.HTMLBody).Trim();
                 return;
             }
 
@@ -186,7 +173,7 @@ namespace CW1_Try2
             queryURL(item.URL, item);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void bulkButton_Click(object sender, EventArgs e)
         {
             String output = "";
             foreach (ListViewItem item in historyView.SelectedItems)
@@ -228,12 +215,15 @@ namespace CW1_Try2
             {
                 using HttpResponseMessage response = await client.GetAsync(url);
 
+                urlTextBox.Text = url;
                 codeTextbox.Text = "" + ((int)response.StatusCode) + " - " + response.StatusCode.ToString(); //TODO: Use string formatting to make this nicer
                 response.EnsureSuccessStatusCode();
 
                 string responseBody = await response.Content.ReadAsStringAsync();
+                string title = GetTitle(responseBody).Trim();
                 htmlTextbox.Text = responseBody.Trim();
-                titleTextbox.Text = GetTitle(responseBody);
+                titleTextbox.Text = title;
+                currentPage = new FavouriteItem(url, title);
 
                 if (cacheToUpdate != null)
                 {
@@ -268,7 +258,7 @@ namespace CW1_Try2
 
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void searchButton_Click(object sender, EventArgs e)
         {
             queryURL(urlTextBox.Text, null);
         }

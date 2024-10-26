@@ -42,8 +42,8 @@
 - [x] Add page title rendering
 - [ ] Homepage URL definition
 - [x] Name association for favourites
-- [ ] Implement favourites saving
-- [ ] Make 'currentWebsite' field and use that for favourites saving (make updating this also update urlTextbox)
+- [x] Implement favourites saving
+- [x] Make 'currentWebsite' field and use that for favourites saving (make updating this also update urlTextbox)
 - [x] GUI Tidyup
 - [x] Error Handling
-- [ ] Rename elements for more clarity
+- [x] Rename elements for more clarity

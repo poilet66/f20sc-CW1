@@ -1,1 +1,1 @@
-|Google
+[{"Url":"https://www.google.com","Name":"Google"},{"Url":"https://www.dish.com","Name":"DISH"}]
