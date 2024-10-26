@@ -31,17 +31,17 @@ namespace CW1_Try2
         {
             this.label1 = new System.Windows.Forms.Label();
             this.urlTextBox = new System.Windows.Forms.TextBox();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.historyView = new System.Windows.Forms.ListView();
             this.History = new System.Windows.Forms.ColumnHeader();
             this.htmlTextbox = new System.Windows.Forms.TextBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.favouritesBox = new System.Windows.Forms.ComboBox();
             this.buttonBack = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.favouriteButton = new System.Windows.Forms.Button();
             this.buttonForward = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.bulkButton = new System.Windows.Forms.Button();
             this.titleTextbox = new System.Windows.Forms.TextBox();
             this.codeTextbox = new System.Windows.Forms.TextBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this.searchButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -64,20 +64,20 @@ namespace CW1_Try2
             this.urlTextBox.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             this.urlTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.onTextboxEnter);
             // 
-            // listView1
+            // historyView
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.historyView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.History});
-            this.listView1.FullRowSelect = true;
-            this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(12, 27);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(139, 411);
-            this.listView1.TabIndex = 4;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            this.historyView.FullRowSelect = true;
+            this.historyView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.historyView.HideSelection = false;
+            this.historyView.Location = new System.Drawing.Point(12, 27);
+            this.historyView.Name = "historyView";
+            this.historyView.Size = new System.Drawing.Size(139, 411);
+            this.historyView.TabIndex = 4;
+            this.historyView.UseCompatibleStateImageBehavior = false;
+            this.historyView.View = System.Windows.Forms.View.Details;
+            this.historyView.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
             // History
             // 
@@ -97,15 +97,16 @@ namespace CW1_Try2
             this.htmlTextbox.TabIndex = 5;
             this.htmlTextbox.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
-            // comboBox1
+            // favouritesBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(606, 51);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(182, 23);
-            this.comboBox1.TabIndex = 6;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            this.comboBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.testFunc);
+            this.favouritesBox.DisplayMember = "Name";
+            this.favouritesBox.FormattingEnabled = true;
+            this.favouritesBox.Location = new System.Drawing.Point(606, 51);
+            this.favouritesBox.Name = "favouritesBox";
+            this.favouritesBox.Size = new System.Drawing.Size(182, 23);
+            this.favouritesBox.TabIndex = 6;
+            this.favouritesBox.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.favouritesBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.testFunc);
             // 
             // buttonBack
             // 
@@ -117,15 +118,15 @@ namespace CW1_Try2
             this.buttonBack.UseVisualStyleBackColor = true;
             this.buttonBack.Click += new System.EventHandler(this.buttonBack_Click);
             // 
-            // button2
+            // favouriteButton
             // 
-            this.button2.Location = new System.Drawing.Point(574, 21);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(26, 24);
-            this.button2.TabIndex = 8;
-            this.button2.Text = "☆";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            this.favouriteButton.Location = new System.Drawing.Point(574, 21);
+            this.favouriteButton.Name = "favouriteButton";
+            this.favouriteButton.Size = new System.Drawing.Size(26, 24);
+            this.favouriteButton.TabIndex = 8;
+            this.favouriteButton.Text = "☆";
+            this.favouriteButton.UseVisualStyleBackColor = true;
+            this.favouriteButton.Click += new System.EventHandler(this.button2_Click_1);
             // 
             // buttonForward
             // 
@@ -137,15 +138,15 @@ namespace CW1_Try2
             this.buttonForward.UseVisualStyleBackColor = true;
             this.buttonForward.Click += new System.EventHandler(this.buttonForward_Click);
             // 
-            // button1
+            // bulkButton
             // 
-            this.button1.Location = new System.Drawing.Point(157, 415);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(56, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "bulk";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.bulkButton.Location = new System.Drawing.Point(157, 415);
+            this.bulkButton.Name = "bulkButton";
+            this.bulkButton.Size = new System.Drawing.Size(56, 23);
+            this.bulkButton.TabIndex = 10;
+            this.bulkButton.Text = "bulk";
+            this.bulkButton.UseVisualStyleBackColor = true;
+            this.bulkButton.Click += new System.EventHandler(this.button1_Click);
             // 
             // titleTextbox
             // 
@@ -163,31 +164,32 @@ namespace CW1_Try2
             this.codeTextbox.Size = new System.Drawing.Size(111, 23);
             this.codeTextbox.TabIndex = 12;
             // 
-            // button3
+            // searchButton
             // 
-            this.button3.Location = new System.Drawing.Point(574, 51);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(26, 23);
-            this.button3.TabIndex = 13;
-            this.button3.Text = "🔍";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.searchButton.Location = new System.Drawing.Point(574, 51);
+            this.searchButton.Name = "searchButton";
+            this.searchButton.Size = new System.Drawing.Size(26, 23);
+            this.searchButton.TabIndex = 13;
+            this.searchButton.Text = "🔍";
+            this.searchButton.UseVisualStyleBackColor = true;
+            this.searchButton.Click += new System.EventHandler(this.button3_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(231)))), ((int)(((byte)(252)))));
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.searchButton);
             this.Controls.Add(this.codeTextbox);
             this.Controls.Add(this.titleTextbox);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.bulkButton);
             this.Controls.Add(this.buttonForward);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.favouriteButton);
             this.Controls.Add(this.buttonBack);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.favouritesBox);
             this.Controls.Add(this.htmlTextbox);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.historyView);
             this.Controls.Add(this.urlTextBox);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
@@ -204,17 +206,17 @@ namespace CW1_Try2
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox urlTextBox;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView historyView;
         private System.Windows.Forms.ColumnHeader History;
         private System.Windows.Forms.TextBox htmlTextbox;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox favouritesBox;
         private System.Windows.Forms.Button buttonBack;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button favouriteButton;
         private System.Windows.Forms.Button buttonForward;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button bulkButton;
         private System.Windows.Forms.TextBox titleTextbox;
         private System.Windows.Forms.TextBox codeTextbox;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button searchButton;
     }
 }
 

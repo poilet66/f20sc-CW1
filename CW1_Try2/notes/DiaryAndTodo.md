@@ -41,7 +41,9 @@
   - [x] History saving (only names, dont cache)
 - [x] Add page title rendering
 - [ ] Homepage URL definition
-- [ ] Name association for favourites
+- [x] Name association for favourites
+- [ ] Implement favourites saving
+- [ ] Make 'currentWebsite' field and use that for favourites saving (make updating this also update urlTextbox)
 - [x] GUI Tidyup
 - [x] Error Handling
 - [ ] Rename elements for more clarity

@@ -24,16 +24,16 @@ namespace CW1_Try2
             InitializeComponent();
             this.client = new HttpClient();
             this.handler = new FavouritesHandler();
-            this.historyHandler = new HistoryHandler(this.listView1);
+            this.historyHandler = new HistoryHandler(this.historyView);
             setFavouritesInCombobox();
 
         }
 
         private void setFavouritesInCombobox()
         {
-            foreach (string favourite in handler.getFavourites())
+            foreach (FavouriteItem item in handler.getFavourites())
             {
-                this.comboBox1.Items.Add(favourite);
+                this.favouritesBox.Items.Add(item);
             }
         }
 
@@ -50,15 +50,15 @@ namespace CW1_Try2
             Console.WriteLine("testing");
             TextBox textbox = (TextBox)sender;
 
-            foreach (string s in handler.getFavourites())
+            foreach (FavouriteItem favourite in handler.getFavourites())
             {
-                if (string.Equals(s, textbox.Text))
+                if (string.Equals(favourite.Url, textbox.Text))
                 {
-                    button2.Text = "★";
+                    favouriteButton.Text = "★";
                     return;
                 }
             }
-            button2.Text = "☆";
+            favouriteButton.Text = "☆";
         }
 
         private void onTextboxEnter(object sender, KeyPressEventArgs e)
@@ -73,8 +73,13 @@ namespace CW1_Try2
 
         private void testFunc(object sender, KeyPressEventArgs e)
         {
-            ComboBox box = (ComboBox)sender;
-            urlTextBox.Text = box.Text;
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                ComboBox box = (ComboBox)sender;
+                FavouriteItem item = (FavouriteItem)box.SelectedItem;
+                urlTextBox.Text = item.Url;
+
+            }
         }
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -101,12 +106,12 @@ namespace CW1_Try2
         {
             string newFave = urlTextBox.Text;
 
-            foreach (string s in handler.getFavourites())
+            foreach (FavouriteItem item in handler.getFavourites())
             {
-                if (string.Equals(newFave, s))
+                if (string.Equals(newFave, item.Url))
                 {
-                    handler.removeFavourite(s);
-                    comboBox1.Items.Remove(s);
+                    handler.removeFavourite(item);
+                    favouritesBox.Items.Remove(item);
                     updateButtonImage();
                     return;
                 }
@@ -115,15 +120,15 @@ namespace CW1_Try2
             if (!string.Equals(newFave, ""))
             {
                 //TODO: Add valid URL validation
-                handler.addFavourite(urlTextBox.Text);
-                comboBox1.Items.Add(urlTextBox.Text);
+                handler.addFavourite(new FavouriteItem(urlTextBox.Text, titleTextbox.Text));
+                favouritesBox.Items.Add(urlTextBox.Text);
                 updateButtonImage();
             }
         }
 
         private void updateButtonImage()
         {
-            button2.Text = (string.Equals(button2.Text, "★") ? "☆" : "★");
+            favouriteButton.Text = (string.Equals(favouriteButton.Text, "★") ? "☆" : "★");
         }
 
         private void buttonBack_Click(object sender, EventArgs e)
@@ -146,18 +151,20 @@ namespace CW1_Try2
 
         private void button2_Click_1(object sender, EventArgs e)
         {
-            if (handler.getFavourites().Contains(urlTextBox.Text))
+            foreach (FavouriteItem item in handler.getFavourites())
             {
-                handler.removeFavourite(urlTextBox.Text);
-                comboBox1.Items.Remove(urlTextBox.Text);
-                updateButtonImage();
+                if(String.Equals(item.Url, urlTextBox.Text))
+                {
+                    handler.removeFavourite(item);
+                    favouritesBox.Items.Remove(item);
+                    updateButtonImage();
+                    return;
+                }
             }
-            else
-            {
-                handler.addFavourite(urlTextBox.Text);
-                comboBox1.Items.Add(urlTextBox.Text);
-                updateButtonImage();
-            }
+            FavouriteItem newItem = new FavouriteItem(urlTextBox.Text, titleTextbox.Text);
+            handler.addFavourite(newItem);
+            favouritesBox.Items.Add(newItem);
+            updateButtonImage();
 
         }
 
@@ -182,7 +189,7 @@ namespace CW1_Try2
         private void button1_Click(object sender, EventArgs e)
         {
             String output = "";
-            foreach (ListViewItem item in listView1.SelectedItems)
+            foreach (ListViewItem item in historyView.SelectedItems)
             {
                 output += item.Text + "\r\n";
             }
@@ -241,7 +248,7 @@ namespace CW1_Try2
                 {
                     // match.Groups[1] contains the domain (e.g., google.com)
                     domain = match.Groups[1].Value;
-                    listView1.Items.Add(new ListViewItem(domain));
+                    historyView.Items.Add(new ListViewItem(domain));
                 }
 
                 // Add to history

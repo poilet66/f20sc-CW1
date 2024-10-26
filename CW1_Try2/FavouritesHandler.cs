@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace CW1_Try2
 {
     class FavouritesHandler
     {
 
-        private List<string> favourites;
+        private List<FavouriteItem> favourites;
 
         static string APP_DIR = Path.GetFullPath(System.AppDomain.CurrentDomain.BaseDirectory); // the directory that your program is installed in  
         static string SAVE_FILE_PATH = Path.Combine(APP_DIR, "favourites.txt");
@@ -20,17 +21,17 @@ namespace CW1_Try2
             this.favourites = loadFavourites();
         }
 
-        public void addFavourite(string name)
+        public void addFavourite(FavouriteItem item)
         {
-            favourites.Add(name);
+            favourites.Add(item);
         }
 
-        public void removeFavourite(string name)
+        public void removeFavourite(FavouriteItem item)
         {
-            favourites.Remove(name);
+            favourites.Remove(item);
         }
 
-        public List<string> getFavourites()
+        public List<FavouriteItem> getFavourites()
         {
             return this.favourites;
         }
@@ -38,30 +39,36 @@ namespace CW1_Try2
         // Overwrite save file with all new favourites (Can be optimised to only save new favourites)
         public void saveFavourites()
         {
-            File.Delete(SAVE_FILE_PATH);
             using (StreamWriter writer = new StreamWriter(SAVE_FILE_PATH))
             {
-                foreach (string fave in this.favourites)
+                foreach (var favourite in favourites)
                 {
-                    writer.WriteLine(fave);
+                    writer.WriteLine($"{favourite.Url}|{favourite.Name}");
                 }
             }
         }
 
-        public List<string> loadFavourites()
+        public List<FavouriteItem> loadFavourites()
         {
+            favourites = new List<FavouriteItem>();
+
+            if (!File.Exists(SAVE_FILE_PATH))
+                return favourites;
+
             using (StreamReader reader = new StreamReader(SAVE_FILE_PATH))
             {
-                List<string> savedFaves = new List<string>();
-                String line;
-
-                // Read file line by line, adding lines (favourites) to favourite list
+                string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    savedFaves.Add(line);
+                    var parts = line.Split('|');
+                    if (parts.Length == 2)
+                    {
+                        var url = parts[0];
+                        var name = parts[1];
+                        favourites.Add(new FavouriteItem(url, name));
+                    }
                 }
-
-                return savedFaves;
+                return favourites;
             }
         }
 
