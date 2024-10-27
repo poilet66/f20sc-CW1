@@ -18,7 +18,7 @@ namespace CW1_Try2
         public static readonly string APP_DIR = Path.GetFullPath(System.AppDomain.CurrentDomain.BaseDirectory);
         private HttpClient client;
         private FavouritesHandler handler;
-        private NewHistoryHandler historyHandler;
+        private HistoryHandler historyHandler;
         private FavouriteItem currentPage;
         private HomepageHandler homepageHandler;
 
@@ -27,7 +27,7 @@ namespace CW1_Try2
             InitializeComponent();
             this.client = new HttpClient();
             this.handler = new FavouritesHandler();
-            this.historyHandler = new NewHistoryHandler(this.historyView);
+            this.historyHandler = new HistoryHandler(this.historyView);
             this.homepageHandler = new HomepageHandler();
             if(!String.Equals(homepageHandler.HomepageUrl, ""))
             {

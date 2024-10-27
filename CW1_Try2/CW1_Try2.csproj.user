@@ -2,6 +2,7 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_LastSelectedProfileId>C:\Users\rohan\OneDrive\Documents\Uni Documents\Computer Science\Year 4\Industrial Programming\CW1_2\CW1_Try2\CW1_Try2\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
+    <ShowAllFiles>false</ShowAllFiles>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="Form1.cs">
