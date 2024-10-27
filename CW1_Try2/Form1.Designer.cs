@@ -43,6 +43,8 @@ namespace CW1_Try2
             this.codeTextbox = new System.Windows.Forms.TextBox();
             this.searchButton = new System.Windows.Forms.Button();
             this.refreshButton = new System.Windows.Forms.Button();
+            this.homepageButton = new System.Windows.Forms.Button();
+            this.editHomepageButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -186,6 +188,26 @@ namespace CW1_Try2
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
+            // homepageButton
+            // 
+            this.homepageButton.Location = new System.Drawing.Point(606, 39);
+            this.homepageButton.Name = "homepageButton";
+            this.homepageButton.Size = new System.Drawing.Size(26, 24);
+            this.homepageButton.TabIndex = 15;
+            this.homepageButton.Text = "🏠";
+            this.homepageButton.UseVisualStyleBackColor = true;
+            this.homepageButton.Click += new System.EventHandler(this.homepageButton_Click);
+            // 
+            // editHomepageButton
+            // 
+            this.editHomepageButton.Location = new System.Drawing.Point(638, 39);
+            this.editHomepageButton.Name = "editHomepageButton";
+            this.editHomepageButton.Size = new System.Drawing.Size(42, 24);
+            this.editHomepageButton.TabIndex = 16;
+            this.editHomepageButton.Text = "✎🏠";
+            this.editHomepageButton.UseVisualStyleBackColor = true;
+            this.editHomepageButton.Click += new System.EventHandler(this.editHomepageButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -193,6 +215,8 @@ namespace CW1_Try2
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(231)))), ((int)(((byte)(252)))));
             this.ClientSize = new System.Drawing.Size(803, 505);
+            this.Controls.Add(this.editHomepageButton);
+            this.Controls.Add(this.homepageButton);
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.searchButton);
             this.Controls.Add(this.codeTextbox);
@@ -206,10 +230,9 @@ namespace CW1_Try2
             this.Controls.Add(this.historyView);
             this.Controls.Add(this.urlTextBox);
             this.Controls.Add(this.label1);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Gongle";
+            this.Text = "Gongle Search Engine";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosing);
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -231,6 +254,8 @@ namespace CW1_Try2
         private System.Windows.Forms.TextBox codeTextbox;
         private System.Windows.Forms.Button searchButton;
         private System.Windows.Forms.Button refreshButton;
+        private System.Windows.Forms.Button homepageButton;
+        private System.Windows.Forms.Button editHomepageButton;
     }
 }
 

@@ -1,1 +1,1 @@
-[{"URL":"https://www.google.com","guiName":"google.com"},{"URL":"https://www.google.com","guiName":"google.com"},{"URL":"https://www.google.com","guiName":"google.com"},{"URL":"https://www.google.com/","guiName":"google.com"},{"URL":"https://www.snapchat.com","guiName":"snapchat.com"},{"URL":"https://www.coolmathgames.com","guiName":"coolmathgames.com"}]
+[]

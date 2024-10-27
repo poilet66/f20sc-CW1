@@ -20,6 +20,7 @@ namespace CW1_Try2
         private FavouritesHandler handler;
         private NewHistoryHandler historyHandler;
         private FavouriteItem currentPage;
+        private HomepageHandler homepageHandler;
 
         public Form1()
         {
@@ -27,6 +28,12 @@ namespace CW1_Try2
             this.client = new HttpClient();
             this.handler = new FavouritesHandler();
             this.historyHandler = new NewHistoryHandler(this.historyView);
+            this.homepageHandler = new HomepageHandler();
+            if(!String.Equals(homepageHandler.HomepageUrl, ""))
+            {
+                urlTextBox.Text = homepageHandler.HomepageUrl;
+                queryURL(homepageHandler.HomepageUrl, null);
+            }
             setFavouritesInCombobox();
 
         }
@@ -44,6 +51,7 @@ namespace CW1_Try2
 
             this.handler.saveFavourites();
             this.historyHandler.saveHistory();
+            this.homepageHandler.saveHomepage();
         }
 
 
@@ -178,19 +186,22 @@ namespace CW1_Try2
         private async void bulkButton_Click(object sender, EventArgs e)
         {
             String output = "";
-            if(String.Equals(urlTextBox.Text, ""))
+            if(historyView.SelectedItems.Count != 0)
+            {
+                foreach (ListViewItem item in historyView.SelectedItems)
+                {
+                    WebsiteResponse response = await fetchWebsite(((HistoryItem)item.Tag).URL);
+                    output += $"{response.responseCode} {response.bytes} {response.url}\r\n"; ;
+
+                }
+                htmlTextbox.Text = output;
+                return;
+            }
+            if (String.Equals(urlTextBox.Text, ""))
             {
                 titleTextbox.Text = "<ERROR> Enter a valid bulk file name <ERROR>";
                 return;
             }
-            /*
-            foreach (ListViewItem item in historyView.SelectedItems)
-            {
-                WebsiteResponse response = await fetchWebsite(((HistoryItem)item.Tag).URL);
-                output += $"{response.responseCode} {response.bytes} {response.url}\r\n"; ;
-
-            }
-            */
             List<string> urls = getBulkDownloads(urlTextBox.Text);
             if (urls == null) return;
             foreach(string url in urls)
@@ -298,17 +309,17 @@ namespace CW1_Try2
             try
             {
                 using HttpResponseMessage response = await client.GetAsync(url);
-                response.EnsureSuccessStatusCode(); // Throws if the status code is not 2xx
+                response.EnsureSuccessStatusCode();
 
-                // Get the response body as a string
+                //read response body
                 string responseBody = await response.Content.ReadAsStringAsync();
 
-                // Populate and return the WebsiteResponse struct
+                //create struct
                 return new WebsiteResponse((int)response.StatusCode, response.Content.Headers.ContentLength ?? 0, url, responseBody);
             }
-            catch (Exception ex) when (ex is InvalidOperationException || ex is HttpRequestException)
+            catch (Exception ex) //if something went wrong, return 'empty' struct
             {
-                // Return a default WebsiteResponse with an error code or message
+                titleTextbox.Text = "<ERROR> HTTPException <ERROR>";
                 return new WebsiteResponse(0, 0, url, "");
             }
         }
@@ -338,6 +349,17 @@ namespace CW1_Try2
 
                 return urlsFromFile;
             }
+        }
+
+        private void homepageButton_Click(object sender, EventArgs e)
+        {
+            urlTextBox.Text = homepageHandler.HomepageUrl;
+        }
+
+        private void editHomepageButton_Click(object sender, EventArgs e)
+        {
+            homepageHandler.HomepageUrl = urlTextBox.Text;
+            titleTextbox.Text = "Homepage saved!";
         }
     }
 
