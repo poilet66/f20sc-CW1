@@ -9,12 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace CW1_Try2
 {
     public partial class Form1 : Form
     {
-
+        public static readonly string APP_DIR = Path.GetFullPath(System.AppDomain.CurrentDomain.BaseDirectory);
         private HttpClient client;
         private FavouritesHandler handler;
         private NewHistoryHandler historyHandler;
@@ -182,11 +183,20 @@ namespace CW1_Try2
                 titleTextbox.Text = "<ERROR> Enter a valid bulk file name <ERROR>";
                 return;
             }
+            /*
             foreach (ListViewItem item in historyView.SelectedItems)
             {
                 WebsiteResponse response = await fetchWebsite(((HistoryItem)item.Tag).URL);
                 output += $"{response.responseCode} {response.bytes} {response.url}\r\n"; ;
 
+            }
+            */
+            List<string> urls = getBulkDownloads(urlTextBox.Text);
+            if (urls == null) return;
+            foreach(string url in urls)
+            {
+                WebsiteResponse response = await fetchWebsite(url);
+                output += $"{response.responseCode} {response.bytes} {response.url}\r\n";
             }
             htmlTextbox.Text = output;
         }
@@ -300,6 +310,33 @@ namespace CW1_Try2
             {
                 // Return a default WebsiteResponse with an error code or message
                 return new WebsiteResponse(0, 0, url, "");
+            }
+        }
+
+        private List<string>? getBulkDownloads(string fileName)
+        {
+            string fileInternal = Path.Combine(APP_DIR, fileName); //get internal path
+            bool internalExists = false, absoluteExists = false; 
+            if (File.Exists(fileInternal)) { internalExists = true;  } //check if file exists interally or absolutely
+            else if(File.Exists(fileName)) { absoluteExists = true; }
+            if(!absoluteExists && !internalExists) //if neither, report to user and return null
+            {
+                titleTextbox.Text = "<ERROR> File does not exist <ERROR>";
+                return null;
+            }
+            string filePath = (absoluteExists) ? fileName : fileInternal; //check WHICH of the two exists (with bias towards absolute)
+            // TODO : Check for legitimate file type
+            using (StreamReader reader = new StreamReader(filePath)) //read file (as seen in old historyHandler/favouriteshandler)
+            {
+                List<string> urlsFromFile = new List<string>();
+                String line;
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    urlsFromFile.Add(line);
+                }
+
+                return urlsFromFile;
             }
         }
     }
