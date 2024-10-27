@@ -9,8 +9,7 @@ namespace CW1_Try2
 {
     class HistoryHandler
     {
-        static string APP_DIR = Path.GetFullPath(System.AppDomain.CurrentDomain.BaseDirectory); // the directory that your program is installed in  
-        static string SAVE_FILE_PATH = Path.Combine(APP_DIR, "history.txt");
+        static string SAVE_FILE_PATH = Path.Combine(Form1.APP_DIR, "history.txt");
 
         System.Windows.Forms.ListView listView;
         List<HistoryItem> history;
@@ -42,7 +41,7 @@ namespace CW1_Try2
 
         public HistoryItem? goForward()
         {
-            if (!forwardExists()) return null; //TODO: Check this is correct
+            if (!forwardExists()) return null;
 
             currentPointer++;
             updateListView();

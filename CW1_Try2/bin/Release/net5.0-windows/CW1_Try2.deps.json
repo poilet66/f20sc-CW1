@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "CW1_Try2/1.0.0": {
+        "runtime": {
+          "CW1_Try2.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CW1_Try2/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

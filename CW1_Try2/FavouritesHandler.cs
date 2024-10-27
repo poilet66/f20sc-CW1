@@ -14,7 +14,7 @@ namespace CW1_Try2
 
         private List<FavouriteItem> favourites;
 
-        static string APP_DIR = Path.GetFullPath(System.AppDomain.CurrentDomain.BaseDirectory); // the directory that your program is installed in  
+        static string APP_DIR = Path.GetFullPath(System.AppDomain.CurrentDomain.BaseDirectory); // base directory 
         static string SAVE_FILE_PATH = Path.Combine(APP_DIR, "favourites.txt");
 
         public FavouritesHandler()

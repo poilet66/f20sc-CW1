@@ -6,4 +6,8 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="HistoryHandler.cs" />
+  </ItemGroup>
+
 </Project>

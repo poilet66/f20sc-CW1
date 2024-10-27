@@ -14,8 +14,7 @@ namespace CW1_Try2
 
     public class NewHistoryHandler
     {
-        static string APP_DIR = Path.GetFullPath(System.AppDomain.CurrentDomain.BaseDirectory);
-        static string SAVE_FILE_PATH = Path.Combine(APP_DIR, "history.txt");
+        static string SAVE_FILE_PATH = Path.Combine(Form1.APP_DIR, "history.txt");
 
         private ListView listView;
         private List<HistoryItem> history;
