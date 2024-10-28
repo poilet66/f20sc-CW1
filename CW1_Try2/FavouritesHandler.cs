@@ -60,7 +60,13 @@ namespace CW1_Try2
             try
             {
                 string jsonString = File.ReadAllText(SAVE_FILE_PATH);
-                return JsonSerializer.Deserialize<List<FavouriteItem>>(jsonString) ?? new List<FavouriteItem>(); // deserialize json - use ?? operator to check if null and return empty list if so
+                try
+                {
+                    return JsonSerializer.Deserialize<List<FavouriteItem>>(jsonString) ?? new List<FavouriteItem>(); // deserialize json - use ?? operator to check if null and return empty list if so
+                } catch (Exception)
+                {
+                    return new List<FavouriteItem>();
+                }
             }
             catch (Exception ex)
             {

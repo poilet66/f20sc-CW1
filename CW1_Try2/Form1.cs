@@ -15,6 +15,7 @@ namespace CW1_Try2
 {
     public partial class Form1 : Form
     {
+        // we can use this base directory across handlers as it'll be constant
         public static readonly string APP_DIR = Path.GetFullPath(System.AppDomain.CurrentDomain.BaseDirectory);
         private HttpClient client;
         private FavouritesHandler handler;
@@ -24,6 +25,7 @@ namespace CW1_Try2
 
         public Form1()
         {
+            // init handlers (they will call their initialising methods internally)
             InitializeComponent();
             this.client = new HttpClient();
             this.handler = new FavouritesHandler();
@@ -41,14 +43,12 @@ namespace CW1_Try2
 
         }
 
-        private void setFavouritesInCombobox()
+        private void Form1_Load(object sender, EventArgs e)
         {
-            foreach (FavouriteItem item in handler.getFavourites())
-            {
-                this.favouritesBox.Items.Add(item);
-            }
+
         }
 
+        // saving logic here
         private void Form1_FormClosing(object sender, FormClosedEventArgs e)
         {
 
@@ -57,7 +57,33 @@ namespace CW1_Try2
             this.homepageHandler.saveHomepage();
         }
 
+        // update favourites box
+        private void setFavouritesInCombobox()
+        {
+            foreach (FavouriteItem item in handler.getFavourites())
+            {
+                this.favouritesBox.Items.Add(item);
+            }
+        }
 
+        // search button click
+        private void searchButton_Click(object sender, EventArgs e)
+        {
+            queryURL(urlTextBox.Text, null);
+        }
+
+        // refresh button click
+        private void refreshButton_Click(object sender, EventArgs e)
+        {
+            if (historyHandler.mostRecent() == null) return; // if no website to refresh return
+            HistoryItem item = historyHandler.mostRecent(); // otherwise, get most recent website and requery it
+            titleTextbox.Text = "";
+            htmlTextbox.Text = "";
+            queryURL(item.URL, item);
+
+        }
+
+        // logic for checking whether entered URL is already favourited
         private void urlTextBox_TextChanged(object sender, EventArgs e)
         {
             TextBox textbox = (TextBox)sender;
@@ -73,6 +99,7 @@ namespace CW1_Try2
             favouriteButton.Text = "☆";
         }
 
+        // key handler for ENTER listening on searchbar
         private void onTextboxEnter(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
@@ -83,7 +110,8 @@ namespace CW1_Try2
             }
         }
 
-        private void testFunc(object sender, KeyPressEventArgs e)
+        // listener for checking if favourite item needs to be moved to url
+        private void favouriteBox_Enter(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
             {
@@ -94,11 +122,8 @@ namespace CW1_Try2
 
             }
         }
-        private void Form1_Load(object sender, EventArgs e)
-        {
 
-        }
-
+        // new favourite button listener (either favourite or unfavourite)
         private void button2_Click(object sender, EventArgs e)
         {
             string newFave = urlTextBox.Text;
@@ -116,18 +141,39 @@ namespace CW1_Try2
             // If URL not empty
             if (!string.Equals(newFave, ""))
             {
-                //TODO: Add valid URL validation
                 handler.addFavourite(new FavouriteItem(currentPage.Url, titleTextbox.Text));
                 favouritesBox.Items.Add(urlTextBox.Text);
                 updateButtonImage();
             }
         }
 
+        private void favouriteButton_Click(object sender, EventArgs e)
+        {
+            foreach (FavouriteItem item in handler.getFavourites())
+            {
+                if (String.Equals(item.Url, urlTextBox.Text))
+                {
+                    handler.removeFavourite(item);
+                    favouritesBox.Items.Remove(item);
+                    updateButtonImage();
+                    return;
+                }
+            }
+            if (currentPage == null) return;
+            FavouriteItem newItem = new FavouriteItem(currentPage.Url, titleTextbox.Text);
+            handler.addFavourite(newItem);
+            favouritesBox.Items.Add(newItem);
+            updateButtonImage();
+
+        }
+
+        // helper method for toggling favourite button
         private void updateButtonImage()
         {
             favouriteButton.Text = (string.Equals(favouriteButton.Text, "★") ? "☆" : "★");
         }
 
+        // history navigation logic
         private void buttonBack_Click(object sender, EventArgs e)
         {
             if (!historyHandler.backExists()) return;
@@ -145,26 +191,6 @@ namespace CW1_Try2
 
             //Otherwise, re-query to render
             queryURL(item.URL, item);
-        }
-
-        private void favouriteButton_Click(object sender, EventArgs e)
-        {
-            foreach (FavouriteItem item in handler.getFavourites())
-            {
-                if(String.Equals(item.Url, urlTextBox.Text))
-                {
-                    handler.removeFavourite(item);
-                    favouritesBox.Items.Remove(item);
-                    updateButtonImage();
-                    return;
-                }
-            }
-            if (currentPage == null) return;
-            FavouriteItem newItem = new FavouriteItem(currentPage.Url, titleTextbox.Text);
-            handler.addFavourite(newItem);
-            favouritesBox.Items.Add(newItem);
-            updateButtonImage();
-
         }
 
         private void buttonForward_Click(object sender, EventArgs e)
@@ -186,39 +212,57 @@ namespace CW1_Try2
             queryURL(item.URL, item);
         }
 
+        // home page methods
+        private void homepageButton_Click(object sender, EventArgs e)
+        {
+            urlTextBox.Text = homepageHandler.HomepageUrl;
+        }
+
+        // save home page
+        private void editHomepageButton_Click(object sender, EventArgs e)
+        {
+            homepageHandler.HomepageUrl = urlTextBox.Text;
+            titleTextbox.Text = "Homepage saved!";
+        }
+
+        // bulk download button click
         private async void bulkButton_Click(object sender, EventArgs e)
         {
             String output = "";
+            // check selected history items first
             if(historyView.SelectedItems.Count != 0)
             {
-                foreach (ListViewItem item in historyView.SelectedItems)
+                foreach (ListViewItem item in historyView.SelectedItems) //for each item
                 {
-                    WebsiteResponse response = await fetchWebsite(((HistoryItem)item.Tag).URL);
-                    output += $"{response.responseCode} {response.bytes} {response.url}\r\n"; ;
+                    WebsiteResponse response = await fetchWebsite(((HistoryItem)item.Tag).URL); // get corresponding URL with history item and query that
+                    output += $"{response.responseCode} {response.bytes} {response.url}\r\n"; ; // add to output
 
                 }
-                htmlTextbox.Text = output;
+                htmlTextbox.Text = output; // print output and return
                 return;
             }
-            if (String.Equals(urlTextBox.Text, ""))
+            if (String.Equals(urlTextBox.Text, "")) //otherwise, if no selected items but url is empty
             {
-                titleTextbox.Text = "<ERROR> Enter a valid bulk file name <ERROR>";
+                titleTextbox.Text = "<ERROR> Enter a valid bulk file name <ERROR>"; // inform user
                 return;
             }
-            List<string> urls = getBulkDownloads(urlTextBox.Text);
+            List<string> urls = getBulkDownloads(urlTextBox.Text); // get bulk downloads from file path
             if (urls == null) return;
             foreach(string url in urls)
             {
-                WebsiteResponse response = await fetchWebsite(url);
-                output += $"{response.responseCode} {response.bytes} {response.url}\r\n";
+                WebsiteResponse response = await fetchWebsite(url); //like before, request each one
+                output += $"{response.responseCode} {response.bytes} {response.url}\r\n"; // and add to output
             }
             htmlTextbox.Text = output;
         }
 
+
+        // helper method to get title from website body
         public static String GetTitle(string htmlBody)
         {
             string ret = "";
-
+            
+            // regex pattern to match titles (with parameters in title tag)
             string pattern = @"<title[^>]*>([\s\S]*?)<\/title>";
             Match match = Regex.Match(htmlBody, pattern, RegexOptions.IgnoreCase);
             if (match.Success)
@@ -228,53 +272,7 @@ namespace CW1_Try2
             return ret;
         }
 
-        private async void queryURL(string url, HistoryItem? cacheToUpdate)
-        {
-            try
-            {
-                using HttpResponseMessage response = await client.GetAsync(url);
-
-                urlTextBox.Text = url;
-                codeTextbox.Text = "" + ((int)response.StatusCode) + " - " + response.StatusCode.ToString(); //TODO: Use string formatting to make this nicer
-                response.EnsureSuccessStatusCode();
-
-                string responseBody = await response.Content.ReadAsStringAsync();
-                string title = GetTitle(responseBody).Trim();
-                htmlTextbox.Text = responseBody.Trim();
-                titleTextbox.Text = title;
-                currentPage = new FavouriteItem(url, title);
-
-                if (cacheToUpdate != null)
-                {
-                    cacheToUpdate.cacheHTML(responseBody);
-                    return;
-                }
-
-                string domain = getDomain(url) ?? url;
-                HistoryItem newItem = new HistoryItem(url, domain);
-
-                // add to listview
-                historyView.Items.Add(new ListViewItem(newItem.guiName) { Tag = newItem });
-                // Add to logical history
-                historyHandler.addToHistory(newItem);
-            } 
-            catch (InvalidOperationException e)
-            {
-                titleTextbox.Text = "<ERROR> Not a valid HTTP Request <ERROR>";
-            }
-            catch (HttpRequestException e)
-            {
-                titleTextbox.Text = "<ERROR> HTTPException <ERROR>";
-                return;
-            }
-
-        }
-
-        private void searchButton_Click(object sender, EventArgs e)
-        {
-            queryURL(urlTextBox.Text, null);
-        }
-
+        // helper method to extract domain from website URL
         public static string? getDomain(string url)
         {
             string domain = url;
@@ -289,16 +287,54 @@ namespace CW1_Try2
             return null;
         }
 
-        private void refreshButton_Click(object sender, EventArgs e)
+        // query method, will either update a cache if one is provided or just outwrite query and add to history
+        private async void queryURL(string url, HistoryItem? cacheToUpdate)
         {
-            if (historyHandler.mostRecent() == null) return;
-            HistoryItem item = historyHandler.mostRecent();
-            titleTextbox.Text = "";
-            htmlTextbox.Text = "";
-            queryURL(item.URL, item);
-           
-        }
+            try
+            {
+                // get website
+                using HttpResponseMessage response = await client.GetAsync(url);
 
+                // set GUI accordingly
+                urlTextBox.Text = url;
+                codeTextbox.Text = "" + ((int)response.StatusCode) + " - " + response.StatusCode.ToString(); //TODO: Use string formatting to make this nicer
+                response.EnsureSuccessStatusCode();
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+                string title = GetTitle(responseBody).Trim();
+                htmlTextbox.Text = responseBody.Trim();
+                titleTextbox.Text = title;
+                currentPage = new FavouriteItem(url, title);
+
+                if (cacheToUpdate != null) // if we have a cache to update, update it and then we're done
+                {
+                    cacheToUpdate.cacheHTML(responseBody);
+                    return;
+                }
+
+                // if no cache, we need to add to history etc
+                string domain = getDomain(url) ?? url;
+                HistoryItem newItem = new HistoryItem(url, domain);
+
+                // add to listview
+                historyView.Items.Add(new ListViewItem(newItem.guiName) { Tag = newItem });
+                // Add to logical history
+                historyHandler.addToHistory(newItem);
+            } 
+            // Error handling
+            catch (InvalidOperationException e)
+            {
+                titleTextbox.Text = "<ERROR> Not a valid HTTP Request <ERROR>";
+            }
+            catch (HttpRequestException e)
+            {
+                titleTextbox.Text = "<ERROR> HTTPException <ERROR>";
+                return;
+            }
+
+        }
+   
+        // helper (more condensed) query method
         private async Task<WebsiteResponse> fetchWebsite(string url)
         {
             try
@@ -318,6 +354,7 @@ namespace CW1_Try2
             }
         }
 
+        // helper method to retrieve urls from specified file path (reletive or absolute)
         private List<string>? getBulkDownloads(string fileName)
         {
             string fileInternal = Path.Combine(APP_DIR, fileName); //get internal path
@@ -343,17 +380,6 @@ namespace CW1_Try2
 
                 return urlsFromFile;
             }
-        }
-
-        private void homepageButton_Click(object sender, EventArgs e)
-        {
-            urlTextBox.Text = homepageHandler.HomepageUrl;
-        }
-
-        private void editHomepageButton_Click(object sender, EventArgs e)
-        {
-            homepageHandler.HomepageUrl = urlTextBox.Text;
-            titleTextbox.Text = "Homepage saved!";
         }
     }
 

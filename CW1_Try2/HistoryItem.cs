@@ -4,7 +4,7 @@ namespace CW1_Try2
 {
     public class HistoryItem
     {
-        [JsonConstructor]
+        [JsonConstructor] // when constructing an item from saved JSON, use this constructor
         public HistoryItem(string url, string guiName)
         {
             this.URL = url;
@@ -21,11 +21,11 @@ namespace CW1_Try2
             this.cached = true;
         }
 
-        [JsonInclude]
+        [JsonInclude] // we want this when we load in
         public string URL { get; set; }
-        [JsonInclude]
+        [JsonInclude] // same here
         public string guiName { get; set; }
-        [JsonIgnore]
+        [JsonIgnore] // dont save this as by default page wont be cached when loaded from save
         public string HTMLBody { get; set; }
         [JsonIgnore]
         public bool cached { get; set; }

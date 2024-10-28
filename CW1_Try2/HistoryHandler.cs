@@ -14,6 +14,7 @@ namespace CW1_Try2
 
     public class HistoryHandler
     {
+        // our save file
         static string SAVE_FILE_PATH = Path.Combine(Form1.APP_DIR, "history.txt");
 
         private ListView listView;
@@ -23,42 +24,44 @@ namespace CW1_Try2
         public HistoryHandler(ListView listView)
         {
             this.listView = listView;
-            this.history = loadHistory();
-            currentPointer = history.Count;
+            this.history = loadHistory(); // load history from file
+            currentPointer = history.Count; // initialise pointer to end of history
         }
 
         public void addToHistory(HistoryItem item)
         {
-            history.Add(item);
-            currentPointer = history.Count - 1;
+            history.Add(item); // add to history
+            currentPointer = history.Count - 1; // increment pointer to end
             updateListView();
         }
 
         public HistoryItem goBack()
         {
-            if (!backExists()) return null;
+            if (!backExists()) return null; //check we have a page to go back to 
 
-            currentPointer--;
-            updateListView();
-            return history[currentPointer];
+            currentPointer--;  // decrement pointer
+            updateListView(); // update history view
+            return history[currentPointer]; // return element from history
         }
 
         public HistoryItem? goForward()
         {
-            if (!forwardExists()) return null;
+            if (!forwardExists()) return null; //check weh ave a page to go forward to
 
-            currentPointer++;
-            updateListView();
-            return history[currentPointer];
+            currentPointer++; //increment pointer
+            updateListView(); //update history view
+            return history[currentPointer]; // return element from history
         }
 
+        // this is like Stack.peek()
         public HistoryItem? mostRecent()
         {
-            if (history.Count <= 0) return null;
+            if (history.Count <= 0) return null; // check we have an element to return
 
             return history[history.Count - 1];
         }
 
+        // helper methods
         public bool backExists()
         {
             return currentPointer > 0;
@@ -69,6 +72,7 @@ namespace CW1_Try2
             return currentPointer < history.Count - 1;
         }
 
+        //used for highlighting the history item that we're on in the GUI
         private void updateListView()
         {
             listView.SelectedItems.Clear();
@@ -100,14 +104,23 @@ namespace CW1_Try2
             if (!File.Exists(SAVE_FILE_PATH))
                 return new List<HistoryItem>();
 
-            // Read the JSON from the file and deserialize it
+            // Read from the file and deserialize it
             var json = File.ReadAllText(SAVE_FILE_PATH);
-            List<HistoryItem> savedHistory = JsonSerializer.Deserialize<List<HistoryItem>>(json) ?? new List<HistoryItem>();
+            List<HistoryItem> savedHistory = new List<HistoryItem>();
+            try
+            {
+                savedHistory = JsonSerializer.Deserialize<List<HistoryItem>>(json);
+            }
+            catch(Exception)
+            {
+                return savedHistory;
+            }
+            
 
-            // Add each item to the ListView
+            // update list view
             foreach (HistoryItem historyItem in savedHistory)
             {
-                listView.Items.Add(new ListViewItem(historyItem.guiName) { Tag = historyItem });
+                listView.Items.Add(new ListViewItem(historyItem.guiName) { Tag = historyItem }); // store 'tag' so we can easily reference object from history
             }
 
             return savedHistory;

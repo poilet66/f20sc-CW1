@@ -9,6 +9,8 @@ namespace CW1_Try2
 {
     class HomepageHandler
     {
+
+        // only one singular homepage so can just use a field
         public string HomepageUrl { get; set; }
         static string HOMEPAGE_PATH = Path.Combine(Form1.APP_DIR, "homepage.txt");
 
@@ -17,6 +19,7 @@ namespace CW1_Try2
             HomepageUrl = loadHomepage();
         }
 
+        // overwrite previous save to new one
         public void saveHomepage()
         {
             File.WriteAllText(HOMEPAGE_PATH, HomepageUrl);

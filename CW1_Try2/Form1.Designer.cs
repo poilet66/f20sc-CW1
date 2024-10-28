@@ -109,7 +109,7 @@ namespace CW1_Try2
             this.favouritesBox.Name = "favouritesBox";
             this.favouritesBox.Size = new System.Drawing.Size(182, 23);
             this.favouritesBox.TabIndex = 6;
-            this.favouritesBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.testFunc);
+            this.favouritesBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.favouriteBox_Enter);
             // 
             // buttonBack
             // 
