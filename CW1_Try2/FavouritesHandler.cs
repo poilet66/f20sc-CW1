@@ -43,7 +43,7 @@ namespace CW1_Try2
             try
             {
                 // Serialize the favourites list to JSON format
-                string jsonString = System.Text.Json.JsonSerializer.Serialize(favourites);
+                string jsonString = JsonSerializer.Serialize(favourites);
                 File.WriteAllText(SAVE_FILE_PATH, jsonString);
             }
             catch (Exception ex)

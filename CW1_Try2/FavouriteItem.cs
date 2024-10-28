@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace CW1_Try2
 {
-    [Serializable]
-    class FavouriteItem
+    public class FavouriteItem
     {
         public string Url { get; }
         public string Name { get; }

@@ -29,10 +29,13 @@ namespace CW1_Try2
             this.handler = new FavouritesHandler();
             this.historyHandler = new HistoryHandler(this.historyView);
             this.homepageHandler = new HomepageHandler();
-            if(!String.Equals(homepageHandler.HomepageUrl, ""))
+            if(homepageHandler.HomepageUrl != null)
             {
-                urlTextBox.Text = homepageHandler.HomepageUrl;
-                queryURL(homepageHandler.HomepageUrl, null);
+                if (!String.Equals(homepageHandler.HomepageUrl, ""))
+                {
+                    urlTextBox.Text = homepageHandler.HomepageUrl;
+                    queryURL(homepageHandler.HomepageUrl, null);
+                }
             }
             setFavouritesInCombobox();
 
@@ -247,15 +250,7 @@ namespace CW1_Try2
                     return;
                 }
 
-                string domain = url;
-                string pattern = @"https?:\/\/(?:www\.)?([^\/]+)";
-                Match match = Regex.Match(url, pattern);
-                if (match.Success)
-                {
-                    // match.Groups[1] contains the domain (e.g., google.com)
-                    domain = match.Groups[1].Value;
-                    
-                }
+                string domain = getDomain(url) ?? url;
                 HistoryItem newItem = new HistoryItem(url, domain);
 
                 // add to listview
@@ -309,7 +304,6 @@ namespace CW1_Try2
             try
             {
                 using HttpResponseMessage response = await client.GetAsync(url);
-                response.EnsureSuccessStatusCode();
 
                 //read response body
                 string responseBody = await response.Content.ReadAsStringAsync();
@@ -336,7 +330,7 @@ namespace CW1_Try2
                 return null;
             }
             string filePath = (absoluteExists) ? fileName : fileInternal; //check WHICH of the two exists (with bias towards absolute)
-            // TODO : Check for legitimate file type
+
             using (StreamReader reader = new StreamReader(filePath)) //read file (as seen in old historyHandler/favouriteshandler)
             {
                 List<string> urlsFromFile = new List<string>();
